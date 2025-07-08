@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyrillic Phishing Detection Framework</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --gradient-start: #2c3e50;
+            --gradient-end: #3498db;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: #fff;
+        }
+
+        .detection-box {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .cyrillic-char {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">Cyrillic Guard</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="py-5 mt-5">
+        <div class="container text-center">
+            <h1 class="display-4 mb-4">Detecting Cross-Cultural Phishing Attacks</h1>
+            <p class="lead">Advanced detection system for Cyrillic script-based homograph attacks</p>
+        </div>
+    </header>
+
+    
+
+    <!-- Problem Section -->
+    <section id="problem" class="py-5">
+        <div class="container detection-box p-4 mb-5">
+            <h2 class="mb-4">The Cultural Blind Spot</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <p>Traditional systems fail to detect:</p>
+                    <ul class="list-unstyled">
+                        <li>→ Homoglyph attacks using Cyrillic characters</li>
+                        <li>→ Culturally contextual phishing lures</li>
+                        <li>→ Localized social engineering patterns</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <div class="alert alert-warning">
+                        <strong>Example:</strong> 
+                        <span>fаcebook.com vs facebook.com</span><br>
+                        <small>Uses Cyrillic 'а' (U+0430) instead of Latin 'a'</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Demo -->
+    <section id="demo" class="py-5">
+        <div class="container">
+            <h2 class="mb-4">Phishing Detection</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <input type="text" id="urlInput" class="form-control" 
+                               placeholder="Enter suspicious URL">
+                    </div>
+                    <button onclick="analyzeURL()" class="btn btn-primary">
+                        Detect Phishing
+                    </button>
+                    <div id="result" class="mt-3"></div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-4 detection-box">
+                        <h4>Homograph Generator</h4>
+                        <div id="homographOutput" class="text-muted"></div>
+                        <button onclick="generateHomograph()" class="btn btn-sm btn-secondary mt-2">
+                            Generate Example
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Cyrillic Detection Logic
+        function detectCyrillic(text) {
+            return /[\u0400-\u04FF]/i.test(text);
+        }
+
+        // Homograph Generator
+        const homographMap = {
+            'a': 'а', 'c': 'с', 'e': 'е', 
+            'o': 'о', 'p': 'р', 'x': 'х'
+        };
+
+        function generateHomograph() {
+            const example = 'facebook';
+            const homograph = example.split('').map(c => 
+                homographMap[c.toLowerCase()] || c
+            ).join('');
+            document.getElementById('homographOutput').innerHTML = `
+                <span class="text-danger">${homograph}</span>.com
+            `;
+        }
+
+        // URL Analysis
+        function analyzeURL() {
+            const input = document.getElementById('urlInput').value;
+            const hasCyrillic = detectCyrillic(input);
+            
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = hasCyrillic ?
+                `<div class="alert alert-danger">Cyrillic characters detected!</div>` :
+                `<div class="alert alert-success">No Cyrillic detected</div>`;
+        }
+    </script>
+
+<h2>Key Information for Phishing Detection</h2>
+<!-- <div style="background-color: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; margin: 20px 0; border-radius: 5px;"> -->
+    <h3>Common Homograph Substitutions:</h3>
+    <ul>
+        <li><strong>a ↔ а</strong>: Latin 'a' (U+0061) vs Cyrillic 'а' (U+0430)</li>
+        <li><strong>e ↔ е</strong>: Latin 'e' (U+0065) vs Cyrillic 'е' (U+0435)</li>
+        <li><strong>o ↔ о</strong>: Latin 'o' (U+006F) vs Cyrillic 'о' (U+043E)</li>
+        <li><strong>p ↔ р</strong>: Latin 'p' (U+0070) vs Cyrillic 'р' (U+0440)</li>
+        <li><strong>c ↔ с</strong>: Latin 'c' (U+0063) vs Cyrillic 'с' (U+0441)</li>
+        <li><strong>x ↔ х</strong>: Latin 'x' (U+0078) vs Cyrillic 'х' (U+0445)</li>
+    </ul>
+    <p><strong>Detection Range:</strong> Cyrillic characters fall within Unicode range U+0400 to U+04FF (1024-1279 decimal)</p>
+</div>
+
+<table border="1" cellpadding="8" cellspacing="0">
+  <thead>
+    <tr>
+      <th>English Alphabet</th>
+      <th>Unicode</th>
+      <th>Russian Alphabet</th>
+      <th>Unicode</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>A</td>
+      <td>U+0041</td>
+      <td>А</td>
+      <td>U+0410</td>
+    </tr>
+    <tr>
+      <td>B</td>
+      <td>U+0042</td>
+      <td>Б</td>
+      <td>U+0411</td>
+    </tr>
+    <tr>
+      <td>C</td>
+      <td>U+0043</td>
+      <td>В</td>
+      <td>U+0412</td>
+    </tr>
+    <tr>
+      <td>D</td>
+      <td>U+0044</td>
+      <td>Г</td>
+      <td>U+0413</td>
+    </tr>
+    <tr>
+      <td>E</td>
+      <td>U+0045</td>
+      <td>Д</td>
+      <td>U+0414</td>
+    </tr>
+    <tr>
+      <td>F</td>
+      <td>U+0046</td>
+      <td>Е</td>
+      <td>U+0415</td>
+    </tr>
+    <tr>
+      <td>G</td>
+      <td>U+0047</td>
+      <td>Ж</td>
+      <td>U+0416</td>
+    </tr>
+    <tr>
+      <td>H</td>
+      <td>U+0048</td>
+      <td>З</td>
+      <td>U+0417</td>
+    </tr>
+    <tr>
+      <td>I</td>
+      <td>U+0049</td>
+      <td>И</td>
+      <td>U+0418</td>
+    </tr>
+    <tr>
+      <td>J</td>
+      <td>U+004A</td>
+      <td>Й</td>
+      <td>U+0419</td>
+    </tr>
+    <tr>
+      <td>K</td>
+      <td>U+004B</td>
+      <td>К</td>
+      <td>U+041A</td>
+    </tr>
+    <tr>
+      <td>L</td>
+      <td>U+004C</td>
+      <td>Л</td>
+      <td>U+041B</td>
+    </tr>
+    <tr>
+      <td>M</td>
+      <td>U+004D</td>
+      <td>М</td>
+      <td>U+041C</td>
+    </tr>
+    <tr>
+      <td>N</td>
+      <td>U+004E</td>
+      <td>Н</td>
+      <td>U+041D</td>
+    </tr>
+    <tr>
+      <td>O</td>
+      <td>U+004F</td>
+      <td>О</td>
+      <td>U+041E</td>
+    </tr>
+    <tr>
+      <td>P</td>
+      <td>U+0050</td>
+      <td>П</td>
+      <td>U+041F</td>
+    </tr>
+    <tr>
+      <td>Q</td>
+      <td>U+0051</td>
+      <td>Р</td>
+      <td>U+0420</td>
+    </tr>
+    <tr>
+      <td>R</td>
+      <td>U+0052</td>
+      <td>С</td>
+      <td>U+0421</td>
+    </tr>
+    <tr>
+      <td>S</td>
+      <td>U+0053</td>
+      <td>Т</td>
+      <td>U+0422</td>
+    </tr>
+    <tr>
+      <td>T</td>
+      <td>U+0054</td>
+      <td>У</td>
+      <td>U+0423</td>
+    </tr>
+    <tr>
+      <td>U</td>
+      <td>U+0055</td>
+      <td>Ф</td>
+      <td>U+0424</td>
+    </tr>
+    <tr>
+      <td>V</td>
+      <td>U+0056</td>
+      <td>Х</td>
+      <td>U+0425</td>
+    </tr>
+    <tr>
+      <td>W</td>
+      <td>U+0057</td>
+      <td>Ц</td>
+      <td>U+0426</td>
+    </tr>
+    <tr>
+      <td>X</td>
+      <td>U+0058</td>
+      <td>Ч</td>
+      <td>U+0427</td>
+    </tr>
+    <tr>
+      <td>Y</td>
+      <td>U+0059</td>
+      <td>Ш</td>
+      <td>U+0428</td>
+    </tr>
+    <tr>
+      <td>Z</td>
+      <td>U+005A</td>
+      <td>Щ</td>
+      <td>U+0429</td>
+    </tr>
+  </tbody>
+</table>
+
+
+</body>
+</html>
